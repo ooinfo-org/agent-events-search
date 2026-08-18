@@ -1,0 +1,53 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:ooinfo.org.br)",
+      "Bash(unzip -o \"base-eventos \\(2\\).pptx\" -d _pptx_extract)",
+      "Bash(python -c 'import re,sys; t=open\\('\\\\''__TRACKED_VAR__'\\\\'',encoding='\\\\''utf-8'\\\\''\\).read\\(\\); print\\('\\\\''\\\\n'\\\\''.join\\(re.findall\\(r'\\\\''<a:t>\\([^<]*\\)</a:t>'\\\\'', t\\)\\)\\)')",
+      "WebFetch(domain:ooinfo.org)",
+      "Bash(curl -s -o /tmp/ooinfo-docs.html -w \"HTTP=%{http_code}\\\\nSIZE=%{size_download}\\\\nCONTENT_TYPE=%{content_type}\\\\nREDIRECT=%{url_effective}\\\\n\" -L -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/120.0 Safari/537.36\" \"https://ooinfo.org/docs\")",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://ooinfo.org/docs/swagger-ui-init.js\" -o /tmp/swagger-init.js)",
+      "Bash(python3)",
+      "Bash(python -c \"print\\('ok'\\)\")",
+      "Bash(node -e \"console.log\\('node ok'\\)\")",
+      "Bash(python)",
+      "Bash(python /tmp/parse_openapi.py)",
+      "Bash(python \"d:/PROJETOS/UFG/base-eventos/_tmp/parse_openapi.py\")",
+      "Bash(python \"d:/PROJETOS/UFG/base-eventos/_tmp/extract_key.py\")",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://ooinfo.org/api/lists/slug/eventos-culturais-rv77\" -o \"d:/PROJETOS/UFG/base-eventos/_tmp/list-eventos.json\" -w \"HTTP=%{http_code}\\\\n\")",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://ooinfo.org/api/lists/slug/eventos-culturais-rv77/fields\" -o \"d:/PROJETOS/UFG/base-eventos/_tmp/fields-eventos.json\" -w \"HTTP=%{http_code}\\\\n\")",
+      "Bash(python \"d:/PROJETOS/UFG/base-eventos/_tmp/show_fields.py\")",
+      "Bash(curl -s -A Mozilla/5.0 https://ooinfo.org/api/lists/cms3ippif002gwfsw2lo4g4fz/fields/__TRACKED_VAR__/options -w 'HTTP=%{http_code}\\\\n')",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://ooinfo.org/api/lists/cms3ippif002gwfsw2lo4g4fz/items/optimized\" -o \"d:/PROJETOS/UFG/base-eventos/_tmp/items-eventos.json\" -w \"HTTP=%{http_code}\\\\n\")",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://ooinfo.org/api/lists/cmqiexdq04ew99hq6efisa78b/items/optimized?limit=1\")",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://ooinfo.org/api/lists/slug/cidades-do-brasil/fields\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(f\\\\\"{f['order']:<3} {f['key']:<25} {f['type']:<12} {f['name']}\\\\\"\\) for f in sorted\\(d, key=lambda x: x['order']\\)]\")",
+      "Bash(python -c ' *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://ooinfo.org/api/lists/cms3ipmre002awfswn5hpscpx/fields\")",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://ooinfo.org/api/lists/cms3ipmre002awfswn5hpscpx/items/optimized?limit=1\")",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://ooinfo.org/api/lists/cms3ippif002gwfsw2lo4g4fz/items/optimized?limit=20\")",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://ooinfo.org/api/lists/cms3ippif002gwfsw2lo4g4fz/items/optimized?limit=50\")",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://ooinfo.org/api/lists/cms3ippif002gwfsw2lo4g4fz/items/optimized?limit=100\" -o /tmp/prod-items.json -w \"HTTP=%{http_code}\\\\n\")",
+      "Bash(curl -s -A Mozilla/5.0 https://ooinfo.org.br/api/lists/slug/__TRACKED_VAR__ -w ' HTTP=%{http_code}\\\\n')",
+      "Bash(curl -s -A Mozilla/5.0 https://ooinfo.org.br/api/lists/__TRACKED_VAR__ -w ' HTTP=%{http_code}\\\\n')",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://ooinfo.org.br/api/lists/cms3ip2np0021wfswc3yr8sna\" -o /tmp/lst-locais.json)",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://ooinfo.org.br/api/lists/cms3ipk4h0024wfsw49j85rwx\" -o /tmp/lst-artistas.json)",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://ooinfo.org.br/api/lists/cms3iplft0027wfswujysih8y\" -o /tmp/lst-orgs.json)",
+      "Bash(cp /tmp/lst-*.json \"d:/PROJETOS/UFG/base-eventos/_tmp/\")",
+      "Bash(npx playwright *)",
+      "Bash(npx tsx *)",
+      "Bash(timeout 30)",
+      "Bash(node --input-type=module --experimental-vm-modules -)",
+      "Bash(Start-Sleep -Seconds 25)",
+      "Bash(Get-Content \"C:\\\\Users\\\\plays\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--PROJETOS-UFG-base-eventos\\\\2963b4db-e65a-404a-aae2-b5b987847968\\\\tasks\\\\bqfastrnj.output\" -ErrorAction SilentlyContinue)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(npx cross-env *)",
+      "Read(//d/PROJETOS/UFG/base-eventos/**)"
+    ],
+    "additionalDirectories": [
+      "\\tmp",
+      "d:\\tmp"
+    ]
+  }
+}

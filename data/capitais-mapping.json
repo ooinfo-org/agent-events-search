@@ -1,0 +1,164 @@
+[
+  {
+    "capital": "Rio Branco",
+    "uf": "AC",
+    "cityId": "cmqigdyvv6fqm9hq6w0yag79r",
+    "matchLabel": "Rio Branco / AC"
+  },
+  {
+    "capital": "Maceió",
+    "uf": "AL",
+    "cityId": "cmqifuifc5bbm9hq6e5b2wbwl",
+    "matchLabel": "Maceió / AL"
+  },
+  {
+    "capital": "Macapá",
+    "uf": "AP",
+    "cityId": "cmqifwb425fbi9hq6hyk9aclc",
+    "matchLabel": "Macapá / AP"
+  },
+  {
+    "capital": "Manaus",
+    "uf": "AM",
+    "cityId": "cmqignh64715q9hq6sf1h78rg",
+    "matchLabel": "Manaus / AM"
+  },
+  {
+    "capital": "Salvador",
+    "uf": "BA",
+    "cityId": "cmqigl6ue6vwu9hq6floysrud",
+    "matchLabel": "Salvador / BA"
+  },
+  {
+    "capital": "Fortaleza",
+    "uf": "CE",
+    "cityId": "cmqifw4q25etq9hq6jj3n2cp6",
+    "matchLabel": "Fortaleza / CE"
+  },
+  {
+    "capital": "Brasília",
+    "uf": "DF",
+    "cityId": "cmqige5bc6g8y9hq6y3co9nl6",
+    "matchLabel": "Brasília / DF"
+  },
+  {
+    "capital": "Vitória",
+    "uf": "ES",
+    "cityId": "cmqigd3wz6dri9hq6qumjttqg",
+    "matchLabel": "Vitória / ES"
+  },
+  {
+    "capital": "Goiânia",
+    "uf": "GO",
+    "cityId": "cmqig8w3j64n69hq634ylmbd4",
+    "matchLabel": "Goiânia / GO"
+  },
+  {
+    "capital": "São Luís",
+    "uf": "MA",
+    "cityId": "cmqifu6155ac29hq6xfkp3sit",
+    "matchLabel": "São Luís / MA"
+  },
+  {
+    "capital": "Cuiabá",
+    "uf": "MT",
+    "cityId": "cmqiglinf6wuq9hq68z4z6s5a",
+    "matchLabel": "Cuiabá / MT"
+  },
+  {
+    "capital": "Campo Grande",
+    "uf": "MS",
+    "cityId": "cmqig6nfk5ziq9hq6zn5sv22s",
+    "matchLabel": "Campo Grande / MS"
+  },
+  {
+    "capital": "Belo Horizonte",
+    "uf": "MG",
+    "cityId": "cmqigfyis6k9y9hq6jdgrdqz1",
+    "matchLabel": "Belo Horizonte / MG"
+  },
+  {
+    "capital": "Belém",
+    "uf": "PA",
+    "cityId": "cmqigmk2k6yze9hq65451ftk8",
+    "matchLabel": "Belém / PA"
+  },
+  {
+    "capital": "João Pessoa",
+    "uf": "PB",
+    "cityId": "cmqigl5n76vti9hq6aq1bl4sa",
+    "matchLabel": "João Pessoa / PB"
+  },
+  {
+    "capital": "Curitiba",
+    "uf": "PR",
+    "cityId": "cmqifttig59pu9hq6vkkt3oax",
+    "matchLabel": "Curitiba / PR"
+  },
+  {
+    "capital": "Recife",
+    "uf": "PE",
+    "cityId": "cmqifvo185dvu9hq6pzup36ud",
+    "matchLabel": "Recife / PE"
+  },
+  {
+    "capital": "Teresina",
+    "uf": "PI",
+    "cityId": "cmqifnyz44whq9hq6yfw7wy2r",
+    "matchLabel": "Teresina / PI"
+  },
+  {
+    "capital": "Rio de Janeiro",
+    "uf": "RJ",
+    "cityId": "cmqigg3lh6koe9hq6gafbygtd",
+    "matchLabel": "Rio de Janeiro / RJ"
+  },
+  {
+    "capital": "Natal",
+    "uf": "RN",
+    "cityId": "cmqifz78l5jmi9hq6hhab0w0w",
+    "matchLabel": "Natal / RN"
+  },
+  {
+    "capital": "Porto Alegre",
+    "uf": "RS",
+    "cityId": "cmqigdmk16f5i9hq6bzkopd2l",
+    "matchLabel": "Porto Alegre / RS"
+  },
+  {
+    "capital": "Porto Velho",
+    "uf": "RO",
+    "cityId": "cmqifx1zc5h2a9hq6hs62y3hu",
+    "matchLabel": "Porto Velho / RO"
+  },
+  {
+    "capital": "Boa Vista",
+    "uf": "RR",
+    "cityId": "cmqifsz7257q69hq6xae8f7i2",
+    "matchLabel": "Boa Vista / RR"
+  },
+  {
+    "capital": "Florianópolis",
+    "uf": "SC",
+    "cityId": "cmqifugx25b769hq694ki1djw",
+    "matchLabel": "Florianópolis / SC"
+  },
+  {
+    "capital": "São Paulo",
+    "uf": "SP",
+    "cityId": "cmqig8jie63nm9hq6om5duny6",
+    "matchLabel": "São Paulo / SP"
+  },
+  {
+    "capital": "Aracaju",
+    "uf": "SE",
+    "cityId": "cmqigk65h6tsq9hq66musvy44",
+    "matchLabel": "Aracaju / SE"
+  },
+  {
+    "capital": "Palmas",
+    "uf": "TO",
+    "cityId": "cmqifo3ra4wvm9hq6p0bh5gbp",
+    "matchLabel": "Palmas / TO"
+  }
+]

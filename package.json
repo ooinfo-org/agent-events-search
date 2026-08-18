@@ -1,0 +1,42 @@
+{
+  "name": "base-eventos",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Agente de IA que coleta eventos culturais nas capitais brasileiras via OpenAI + web search.",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+
+    "modo:simples": "cross-env SEARCH_PROVIDER= tsx src/index.ts",
+    "modo:brave": "cross-env SEARCH_PROVIDER=brave tsx src/index.ts",
+    "modo:tavily": "cross-env SEARCH_PROVIDER=tavily tsx src/index.ts",
+    "modo:browser": "cross-env SEARCH_PROVIDER=playwright tsx src/index.ts",
+
+    "dev:openai": "cross-env AGENT_PROVIDER=openai tsx src/index.ts",
+    "dev:openrouter": "cross-env AGENT_PROVIDER=openrouter tsx src/index.ts",
+    "dev:search": "cross-env SEARCH_PROVIDER=playwright tsx src/index.ts",
+    "dev:agent-browser": "cross-env AGENT_PROVIDER=agent-browser tsx src/index.ts",
+    "start": "tsx src/index.ts",
+    "run:capital": "tsx src/index.ts --capital",
+    "inspect:api": "tsx src/api/inspect.ts",
+    "debug:post": "tsx src/api/debug-post.ts",
+    "cleanup:debug": "tsx src/api/cleanup.ts",
+    "debug:image": "tsx src/api/debug-image.ts",
+    "debug:og": "tsx src/api/debug-og.ts",
+    "debug:search": "tsx src/search/debug-search.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "openai": "^4.77.0",
+    "playwright": "^1.62.1",
+    "sharp": "^0.35.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "cross-env": "^10.1.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
