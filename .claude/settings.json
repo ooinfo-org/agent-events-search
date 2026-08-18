@@ -43,7 +43,8 @@
       "Bash(Get-Content \"C:\\\\Users\\\\plays\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--PROJETOS-UFG-base-eventos\\\\2963b4db-e65a-404a-aae2-b5b987847968\\\\tasks\\\\bqfastrnj.output\" -ErrorAction SilentlyContinue)",
       "Bash(echo \"EXIT:$?\")",
       "Bash(npx cross-env *)",
-      "Read(//d/PROJETOS/UFG/base-eventos/**)"
+      "Read(//d/PROJETOS/UFG/base-eventos/**)",
+      "Bash(grep -n \"\\\\\"FieldDto\\\\\"\\\\\\\\|\\\\\"Field\\\\\":\" d:\\\\PROJETOS\\\\UFG\\\\base-eventos\\\\_tmp\\\\openapi.json)"
     ],
     "additionalDirectories": [
       "\\tmp",

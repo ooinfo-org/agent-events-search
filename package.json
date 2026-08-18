@@ -24,6 +24,15 @@
     "debug:image": "tsx src/api/debug-image.ts",
     "debug:og": "tsx src/api/debug-og.ts",
     "debug:search": "tsx src/search/debug-search.ts",
+    "table:all":      "tsx scripts/create-all-tables.ts",
+    "table:eventos":  "tsx scripts/create-table-eventos.ts",
+    "table:fontes":   "tsx scripts/create-table-fontes.ts",
+    "table:locais":   "tsx scripts/create-table-locais.ts",
+    "table:artistas": "tsx scripts/create-table-artistas.ts",
+    "table:orgs":     "tsx scripts/create-table-orgs.ts",
+    "table:buckets":  "tsx scripts/create-table-buckets.ts",
+    "fontes:seed":    "tsx scripts/seed-fontes.ts",
+    "buckets:seed":   "tsx scripts/seed-buckets.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

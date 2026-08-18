@@ -3,18 +3,13 @@ import { hasMojibake } from './api/mojibake.js';
 import { checkAliveConcurrent } from './api/validateUrl.js';
 import { getProvider } from './providers/index.js';
 import type { Capital } from './capitals.js';
+import { fetchBuckets, type CategoryBucket } from './api/fetchBuckets.js';
 
 const LOOKAHEAD_DAYS = Number(process.env.EVENT_LOOKAHEAD_DAYS ?? 7);
 const MAX_EVENTS = Number(process.env.MAX_EVENTS_PER_CAPITAL ?? 15);
 const DEBUG = process.env.DEBUG === '1';
 
 const provider = getProvider();
-
-interface CategoryBucket {
-  label: string;
-  categorias: string[];
-  hints: string[];
-}
 
 const BUCKETS: CategoryBucket[] = [
   {
@@ -184,9 +179,10 @@ async function runWithConcurrency<T>(tasks: Array<() => Promise<T>>, limit: numb
 }
 
 export async function coletarEventosCapital(capital: Capital): Promise<CapitalEventos> {
-  const concurrency = provider.concurrency ?? BUCKETS.length;
-  console.error(`  → provider=${provider.name} model=${provider.model} — disparando ${BUCKETS.length} buscas (concorrência: ${concurrency})...`);
-  const resultados = await runWithConcurrency(BUCKETS.map((b) => () => coletarBucket(capital, b)), concurrency);
+  const buckets = await fetchBuckets(BUCKETS);
+  const concurrency = provider.concurrency ?? buckets.length;
+  console.error(`  → provider=${provider.name} model=${provider.model} — disparando ${buckets.length} buscas (concorrência: ${concurrency})...`);
+  const resultados = await runWithConcurrency(buckets.map((b) => () => coletarBucket(capital, b)), concurrency);
   const brutos = resultados.flat();
 
   const validos: Evento[] = [];
