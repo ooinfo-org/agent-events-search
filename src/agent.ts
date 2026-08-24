@@ -4,6 +4,7 @@ import { checkAliveConcurrent } from './api/validateUrl.js';
 import { getProvider } from './providers/index.js';
 import type { Capital } from './capitals.js';
 import { fetchBuckets, type CategoryBucket } from './api/fetchBuckets.js';
+import { buildPlatformContext } from './api/platformScraper.js';
 
 const LOOKAHEAD_DAYS = Number(process.env.EVENT_LOOKAHEAD_DAYS ?? 7);
 const MAX_EVENTS = Number(process.env.MAX_EVENTS_PER_CAPITAL ?? 15);
@@ -74,7 +75,7 @@ const BUCKETS: CategoryBucket[] = [
   },
 ];
 
-function buildPrompt(capital: Capital, bucket: CategoryBucket): string {
+function buildPrompt(capital: Capital, bucket: CategoryBucket, platformContext: string): string {
   const hoje = new Date().toISOString().slice(0, 10);
   return `Você é um agente de coleta de eventos culturais. Use a ferramenta web_search MÚLTIPLAS VEZES (mínimo 3 buscas distintas) para encontrar eventos reais em **${capital.nome} - ${capital.uf}**.
 
@@ -89,10 +90,17 @@ function buildPrompt(capital: Capital, bucket: CategoryBucket): string {
 
           META: retornar entre **5 e 10 eventos** desta categoria. Se encontrar menos, faça mais buscas com termos diferentes. Se encontrar zero após 4 buscas, retorne array vazio.
 
+          **REGRA CRÍTICA — link_evento:**
+          Páginas de busca/listagem (ex: sympla.com.br/eventos/goiania-go) mostram VÁRIOS eventos, cada um com seu próprio link (ex: sympla.com.br/evento/cha-da-alice/3535913).
+          - \`link_evento\` = URL **da página individual do evento**, não da listagem.
+          - Se encontrar evento numa listagem, use o link específico daquele card/item (ex: /evento/slug/ID).
+          - **NUNCA construa ou adivinhe** IDs numéricos de URLs (ex: Sympla usa IDs como /3535913 — se não viu este número na página, não invente).
+          - Se não tiver URL específica → faça busca extra: "[nome evento] ${capital.nome} sympla" ou site oficial.
+          - **NUNCA use homepage ou listagem genérica** como link_evento. Sem URL real → descarte o evento.
+
           Regras estritas:
           - **NÃO invente eventos.** Cada evento deve ter \`fonte_url\` real que você visitou.
           - Só use categorias: ${bucket.categorias.join(' | ')} (nada fora disso).
-          - \`link_evento\` = URL oficial do evento (obrigatório real, valida via HTTP).
           - \`link_foto\` = URL direta da imagem SE tiver **certeza** (viu explicitamente na página). NÃO invente URLs seguindo padrões de CMS. Se não tiver certeza, use null — nosso código extrai a imagem da página do evento automaticamente via og:image.
           - Datas em ISO YYYY-MM-DD.
           - Se campo desconhecido = null (não invente).
@@ -101,13 +109,13 @@ function buildPrompt(capital: Capital, bucket: CategoryBucket): string {
           - \`artistas\`: separe os artistas em itens individuais. Ex: "Chitãozinho & Xororó + Zezé Di Camargo & Luciano" → 4 itens: [{nome_artistico:"Chitãozinho & Xororó",tipo:"Banda"},{nome_artistico:"Zezé Di Camargo & Luciano",tipo:"Banda"}...]. Se duo/dupla é uma unidade artística, mantém junto (ex: "Chitãozinho & Xororó" é 1 artista). Para peças/exposições sem artistas conhecidos, array vazio.
           - \`organizacoes\`: produtora ou instituição que organiza (ex: "Prefeitura de Goiânia", "Sesc Goiás", "T4F"). Array vazio se não souber.
 
-          Retorne apenas o JSON estruturado.`;
+          Retorne apenas o JSON estruturado.${platformContext}`;
 }
 
-async function coletarBucket(capital: Capital, bucket: CategoryBucket): Promise<Evento[]> {
+async function coletarBucket(capital: Capital, bucket: CategoryBucket, platformContext: string): Promise<Evento[]> {
   try {
     const queries = bucket.hints.slice(0, 3).map((h) => `${h} ${capital.nome}`);
-    const { text, toolCalls } = await provider.collectBucket(buildPrompt(capital, bucket), eventoJsonSchema, queries);
+    const { text, toolCalls } = await provider.collectBucket(buildPrompt(capital, bucket, platformContext), eventoJsonSchema, queries);
     if (DEBUG) {
       console.error(`    [${bucket.label}] tool calls: ${toolCalls}`);
     }
@@ -148,6 +156,15 @@ function dedup(eventos: Evento[]): Evento[] {
   return out;
 }
 
+function isRootUrl(url: string): boolean {
+  try {
+    const { pathname, search, hash } = new URL(url);
+    return (pathname === '/' || pathname === '') && !search && !hash;
+  } catch {
+    return true;
+  }
+}
+
 function filtrarPassados(eventos: Evento[]): { validos: Evento[]; removidos: number } {
   const hoje = new Date().toISOString().slice(0, 10);
   const validos: Evento[] = [];
@@ -179,10 +196,17 @@ async function runWithConcurrency<T>(tasks: Array<() => Promise<T>>, limit: numb
 }
 
 export async function coletarEventosCapital(capital: Capital): Promise<CapitalEventos> {
-  const buckets = await fetchBuckets(BUCKETS);
+  const [buckets, platformContext] = await Promise.all([
+    fetchBuckets(BUCKETS),
+    buildPlatformContext(capital.nome, capital.uf).catch(() => ''),
+  ]);
+  if (platformContext) {
+    const count = (platformContext.match(/https?:\/\//g) ?? []).length;
+    console.error(`  ✓ Sympla: ${count} URLs reais pré-carregadas`);
+  }
   const concurrency = provider.concurrency ?? buckets.length;
   console.error(`  → provider=${provider.name} model=${provider.model} — disparando ${buckets.length} buscas (concorrência: ${concurrency})...`);
-  const resultados = await runWithConcurrency(buckets.map((b) => () => coletarBucket(capital, b)), concurrency);
+  const resultados = await runWithConcurrency(buckets.map((b) => () => coletarBucket(capital, b, platformContext)), concurrency);
   const brutos = resultados.flat();
 
   const validos: Evento[] = [];
@@ -218,11 +242,19 @@ export async function coletarEventosCapital(capital: Capital): Promise<CapitalEv
   }
   if (linksQuebrados) console.error(`  ⚠️  ${linksQuebrados} descartados (link_evento quebrado)`);
 
+  const comLinkEspecifico: Evento[] = [];
+  let linksGenericos = 0;
+  for (const e of comLinkValido) {
+    if (isRootUrl(e.link_evento)) linksGenericos += 1;
+    else comLinkEspecifico.push(e);
+  }
+  if (linksGenericos) console.error(`  ⚠️  ${linksGenericos} descartados (link_evento homepage genérica)`);
+
   const payload: CapitalEventos = {
     capital: capital.nome,
     uf: capital.uf,
     coletado_em: new Date().toISOString(),
-    eventos: comLinkValido,
+    eventos: comLinkEspecifico,
   };
 
   return CapitalEventosSchema.parse(payload);

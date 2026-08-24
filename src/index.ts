@@ -91,7 +91,7 @@ async function main() {
       console.error('\n🔴 modo LIVE — gravando na API ooinfo');
     }
 
-    let g = { created: 0, updated: 0, unchanged: 0, dryRunCreate: 0, dryRunUpdate: 0, dryRunUnchanged: 0, errors: 0 };
+    let g = { created: 0, updated: 0, unchanged: 0, dryRunCreate: 0, dryRunUpdate: 0, dryRunUnchanged: 0, skippedEnded: 0, errors: 0 };
     for (const c of resultados) {
       const s = await pushCapital(c, { dryRun });
       g.created += s.created;
@@ -100,14 +100,16 @@ async function main() {
       g.dryRunCreate += s.dryRunCreate;
       g.dryRunUpdate += s.dryRunUpdate;
       g.dryRunUnchanged += s.dryRunUnchanged;
+      g.skippedEnded += s.skippedEnded;
       g.errors += s.errors;
     }
 
+    const encerrados = g.skippedEnded ? `, encerrados=${g.skippedEnded}` : '';
     console.error(
       `\n📊 push total: ${dryRun
         ? `criaria=${g.dryRunCreate}, atualizaria=${g.dryRunUpdate}, sem-mudança=${g.dryRunUnchanged}`
         : `criados=${g.created}, atualizados=${g.updated}, sem-mudança=${g.unchanged}`
-      }, erros=${g.errors}`,
+      }${encerrados}, erros=${g.errors}`,
     );
   }
 }

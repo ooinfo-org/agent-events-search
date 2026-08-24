@@ -1,6 +1,6 @@
 import { login } from './client.js';
 import { ensureFonteAgente } from './ensureFonte.js';
-import { mapEvento } from './mapEvento.js';
+import { mapEvento, EventoEncerradoError } from './mapEvento.js';
 import { upsertEvento, type UpsertResult } from './upsertEvento.js';
 import type { CapitalEventos } from '../schema.js';
 
@@ -11,11 +11,12 @@ interface Summary {
   dryRunCreate: number;
   dryRunUpdate: number;
   dryRunUnchanged: number;
+  skippedEnded: number;
   errors: number;
 }
 
 function emptySummary(): Summary {
-  return { created: 0, updated: 0, unchanged: 0, dryRunCreate: 0, dryRunUpdate: 0, dryRunUnchanged: 0, errors: 0 };
+  return { created: 0, updated: 0, unchanged: 0, dryRunCreate: 0, dryRunUpdate: 0, dryRunUnchanged: 0, skippedEnded: 0, errors: 0 };
 }
 
 function tally(summary: Summary, r: UpsertResult) {
@@ -55,9 +56,14 @@ export async function pushCapital(
       const extra = 'diffKeys' in result && result.diffKeys.length ? ` (${result.diffKeys.join(', ')})` : '';
       console.error(`  ${mark[result.action]}: ${evento.titulo}${extra}`);
     } catch (err) {
-      summary.errors += 1;
-      const msg = err instanceof Error ? err.message : String(err);
-      console.error(`  ❌ ${evento.titulo}: ${msg}`);
+      if (err instanceof EventoEncerradoError) {
+        summary.skippedEnded += 1;
+        console.error(`  ⏩ encerrado: ${evento.titulo}`);
+      } else {
+        summary.errors += 1;
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error(`  ❌ ${evento.titulo}: ${msg}`);
+      }
     }
   }
 

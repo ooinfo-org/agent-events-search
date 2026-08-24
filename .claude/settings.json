@@ -44,7 +44,13 @@
       "Bash(echo \"EXIT:$?\")",
       "Bash(npx cross-env *)",
       "Read(//d/PROJETOS/UFG/base-eventos/**)",
-      "Bash(grep -n \"\\\\\"FieldDto\\\\\"\\\\\\\\|\\\\\"Field\\\\\":\" d:\\\\PROJETOS\\\\UFG\\\\base-eventos\\\\_tmp\\\\openapi.json)"
+      "Bash(grep -n \"\\\\\"FieldDto\\\\\"\\\\\\\\|\\\\\"Field\\\\\":\" d:\\\\PROJETOS\\\\UFG\\\\base-eventos\\\\_tmp\\\\openapi.json)",
+      "Bash(node -e \"const d=JSON.parse\\(require\\('fs'\\).readFileSync\\('d:/PROJETOS/UFG/base-eventos/output/eventos-goiania-2026-08-24_14-57.json','utf8'\\)\\); const evs=d.eventos; console.log\\('total:',evs.length\\); const comFoto=evs.filter\\(e=>e.link_foto\\).length; console.log\\('com link_foto:',comFoto\\); console.log\\('sem link_foto:',evs.length-comFoto\\); console.log\\('exemplo link_evento:',evs[0].link_evento\\); console.log\\('exemplo link_foto:',evs[0].link_foto\\);\")",
+      "Bash(node -e \"const d=JSON.parse\\(require\\('fs'\\).readFileSync\\('d:/PROJETOS/UFG/base-eventos/output/eventos-goiania-2026-08-24_16-49.json','utf8'\\)\\); d.eventos.filter\\(e=>e.fonte_url&&e.fonte_url.includes\\('sympla'\\)\\).forEach\\(e=>console.log\\(e.titulo,'|',e.data_inicio,'|',e.fonte_url.slice\\(0,80\\)\\)\\);\")",
+      "Bash(node -e ' *)",
+      "WebFetch(domain:www.sympla.com.br)",
+      "WebFetch(domain:www.shoppingbougainville.com)",
+      "Bash(node --input-type=module)"
     ],
     "additionalDirectories": [
       "\\tmp",

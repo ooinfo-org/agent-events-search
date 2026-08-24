@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 /**
  * Passo 2: popula (ou atualiza) os buckets na lista do Ooinfo.
- * Requer OOINFO_LIST_ID_BUCKETS no .env (obtido após create-table.ts).
+ * Requer OOINFO_LIST_ID_BUCKETS no .env (obtido após table:buckets ou table:all).
  * Execute: npm run buckets:seed
  *
  * Idempotente — faz upsert por label, sem duplicar.

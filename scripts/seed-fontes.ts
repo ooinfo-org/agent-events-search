@@ -41,6 +41,7 @@ async function main() {
 
   if (existing) {
     console.log(`✓ Fonte "${FONTE_LABEL}" já existe: ${existing.id}`);
+    console.log('\n✅ Concluído!');
     return;
   }
 
