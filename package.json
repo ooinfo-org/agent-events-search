@@ -33,6 +33,7 @@
     "table:buckets":  "tsx scripts/create-table-buckets.ts",
     "fontes:seed":    "tsx scripts/seed-fontes.ts",
     "buckets:seed":   "tsx scripts/seed-buckets.ts",
+    "cidades:rebuild":"tsx scripts/rebuild-cidades-mapping.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

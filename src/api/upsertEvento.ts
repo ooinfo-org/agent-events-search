@@ -1,4 +1,5 @@
-import { apiRequest, LIST_ID_EVENTOS } from './client.js';
+import { apiRequest } from './client.js';
+import { getEventosId } from './listIds.js';
 import type { MappedEvento } from './mapEvento.js';
 
 interface ExistingItem {
@@ -28,11 +29,12 @@ function dedupKey(nome: string, cityId: string): string {
 
 async function fetchAllEventosForCity(cityId: string): Promise<ExistingItem[]> {
   if (existingCache.has(cityId)) return existingCache.get(cityId)!;
+  const EVENTOS_LIST_ID = await getEventosId();
   const all: ExistingItem[] = [];
   let page = 1;
   while (true) {
     const res = await apiRequest<ItemsResponse<ExistingItem>>(
-      `/api/lists/${LIST_ID_EVENTOS}/items/optimized`,
+      `/api/lists/${EVENTOS_LIST_ID}/items/optimized`,
       { auth: false, query: { page, limit: 200 } },
     );
     for (const it of res.data) {
@@ -79,8 +81,9 @@ export async function upsertEvento(
 
   if (!match) {
     if (opts.dryRun) return { action: 'dry-run-create', nome };
+    const EVENTOS_LIST_ID = await getEventosId();
     const created = await apiRequest<{ id: string }>(
-      `/api/lists/${LIST_ID_EVENTOS}/items`,
+      `/api/lists/${EVENTOS_LIST_ID}/items`,
       { method: 'POST', body: { values: mapped.values } },
     );
     return { action: 'created', id: created.id, nome };
@@ -97,8 +100,9 @@ export async function upsertEvento(
 
   if (opts.dryRun) return { action: 'dry-run-update', id: match.id, nome, diffKeys };
 
+  const EVENTOS_LIST_ID = await getEventosId();
   await apiRequest(
-    `/api/lists/${LIST_ID_EVENTOS}/items/${match.id}`,
+    `/api/lists/${EVENTOS_LIST_ID}/items/${match.id}`,
     { method: 'PATCH', body: { values: diff } },
   );
   return { action: 'updated', id: match.id, nome, diffKeys };

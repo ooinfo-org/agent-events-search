@@ -1,0 +1,12 @@
+node_modules
+output
+.env
+.env.*
+!.env.example
+*.log
+.git
+.vscode
+docs
+scripts/_probe.ts
+_tmp
+*.pptx

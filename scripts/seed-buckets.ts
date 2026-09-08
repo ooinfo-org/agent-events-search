@@ -10,6 +10,7 @@
 import 'dotenv/config';
 import { login, apiRequest } from '../src/api/client.js';
 import { BUCKET_LIST_SLUG, BUCKETS } from './lib/buckets-data.js';
+import { resolveListId as resolveListIdShared } from './lib/table-utils.js';
 
 interface Item {
   id: string;
@@ -22,12 +23,11 @@ interface ItemsResponse {
 }
 
 async function resolveListId(): Promise<string> {
-  const fromEnv = process.env.OOINFO_LIST_ID_BUCKETS;
-  if (fromEnv) return fromEnv;
-
-  console.log('  OOINFO_LIST_ID_BUCKETS não definido, descobrindo via slug...');
-  const list = await apiRequest<{ id: string }>(`/api/lists/slug/${BUCKET_LIST_SLUG}`, { auth: false });
-  return list.id;
+  return resolveListIdShared({
+    envVar: 'OOINFO_LIST_ID_BUCKETS',
+    slugCandidates: [BUCKET_LIST_SLUG],
+    errorHint: 'Lista de buckets não encontrada. Rode `npm run table:buckets` primeiro.',
+  });
 }
 
 async function upsertBuckets(listId: string): Promise<void> {

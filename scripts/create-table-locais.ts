@@ -5,14 +5,16 @@
  */
 import 'dotenv/config';
 import { login } from '../src/api/client.js';
-import { ensureList, ensureFields } from './lib/table-utils.js';
-import { LOCAIS_LIST_SLUG, CIDADES_LIST_ID } from '../src/api/mapping.js';
+import { ensureList, ensureFields, resolveCidadesListId } from './lib/table-utils.js';
+import { LOCAIS_LIST_SLUG } from '../src/api/mapping.js';
 
 async function main() {
   console.log('=== create-table: locais-culturais ===\n');
 
   await login();
   console.log('✓ Login OK\n');
+
+  const CIDADES_LIST_ID = await resolveCidadesListId();
 
   const listId = await ensureList(LOCAIS_LIST_SLUG, {
     name: 'Locais Culturais',
@@ -25,7 +27,7 @@ async function main() {
     { key: 'tipo_de_local',name: 'Tipo de Local', type: 'TAGS', isRequired: false },
     {
       key: 'cidade', name: 'Cidade', type: 'RELATION', isRequired: true,
-      configJson: { targetListId: CIDADES_LIST_ID, labelFieldKey: 'cidade_uf' },
+      configJson: { targetListId: CIDADES_LIST_ID },
     },
     { key: 'endereco', name: 'Endereço', type: 'TEXT', isRequired: false },
     { key: 'bairro',   name: 'Bairro',   type: 'TEXT', isRequired: false },

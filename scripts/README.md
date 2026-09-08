@@ -2,6 +2,8 @@
 
 Execute via `npm run <script>` ou diretamente com `npx tsx scripts/<arquivo>.ts`.
 
+📖 **Guia completo com schema de cada tabela:** [`docs/setup-ooinfo.md`](../docs/setup-ooinfo.md)
+
 ---
 
 ## Setup completo (ambiente novo)

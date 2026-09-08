@@ -8,10 +8,9 @@
  */
 import 'dotenv/config';
 import { login } from '../src/api/client.js';
-import { ensureList, ensureFields } from './lib/table-utils.js';
+import { ensureList, ensureFields, resolveCidadesListId } from './lib/table-utils.js';
 import { BUCKET_LIST_SLUG } from './lib/buckets-data.js';
 import {
-  CIDADES_LIST_ID,
   FONTES_LIST_SLUG,
   LOCAIS_LIST_SLUG,
   ARTISTAS_LIST_SLUG,
@@ -34,6 +33,9 @@ async function main() {
 
   await login();
   console.log('✓ Login OK\n');
+
+  const CIDADES_LIST_ID = await resolveCidadesListId();
+  console.log(`✓ Cidades list: ${CIDADES_LIST_ID}\n`);
 
   // ── 1. Fontes ──────────────────────────────────────────────────────────────
   console.log('── fontes-de-eventos ──');
@@ -61,7 +63,7 @@ async function main() {
     { key: 'tipo_de_local', name: 'Tipo de Local', type: 'TAGS', isRequired: false },
     {
       key: 'cidade', name: 'Cidade', type: 'RELATION', isRequired: true,
-      configJson: { targetListId: CIDADES_LIST_ID, labelFieldKey: 'cidade_uf' },
+      configJson: { targetListId: CIDADES_LIST_ID },
     },
     { key: 'endereco', name: 'Endereço', type: 'TEXT', isRequired: false },
     { key: 'bairro',   name: 'Bairro',   type: 'TEXT', isRequired: false },
@@ -95,6 +97,7 @@ async function main() {
   const eventosId = await ensureList(EVENTOS_SLUG, {
     name: 'Eventos Culturais',
     description: 'Agenda de eventos culturais nas capitais brasileiras',
+    settingsJson: { displayMode: 'list', itemsPerPage: 10 },
   });
   await ensureFields(eventosId, [
     { key: 'nome_do_evento',           name: 'Nome do Evento',           type: 'TEXT',     isRequired: true  },
@@ -114,23 +117,23 @@ async function main() {
     { key: 'ultima_verificacao',       name: 'Última Verificação',       type: 'DATE',     isRequired: false },
     {
       key: 'cidade_principal', name: 'Cidade Principal', type: 'RELATION', isRequired: true,
-      configJson: { targetListId: CIDADES_LIST_ID, labelFieldKey: 'cidade_uf' },
+      configJson: { targetListId: CIDADES_LIST_ID },
     },
     {
       key: 'local_principal', name: 'Local Principal', type: 'RELATION', isRequired: false,
-      configJson: { targetListId: locaisId, labelFieldKey: 'nome' },
+      configJson: { targetListId: locaisId },
     },
     {
       key: 'artistas', name: 'Artistas', type: 'RELATION', isRequired: false,
-      configJson: { targetListId: artistasId, labelFieldKey: 'nome_artistico' },
+      configJson: { targetListId: artistasId, allowMultiple: true },
     },
     {
       key: 'organizacoes', name: 'Organizações', type: 'RELATION', isRequired: false,
-      configJson: { targetListId: orgsId, labelFieldKey: 'nome' },
+      configJson: { targetListId: orgsId, allowMultiple: true },
     },
     {
       key: 'fontes', name: 'Fontes', type: 'RELATION', isRequired: true,
-      configJson: { targetListId: fontesId, labelFieldKey: 'nome' },
+      configJson: { targetListId: fontesId, allowMultiple: true },
     },
   ]);
 

@@ -7,7 +7,7 @@
  */
 import 'dotenv/config';
 import { login, apiRequest } from '../src/api/client.js';
-import { FONTES_LIST_ID, FONTES_LIST_SLUG } from '../src/api/mapping.js';
+import { resolveListId } from './lib/table-utils.js';
 
 const FONTE_LABEL = 'Agente OpenAI Web Search';
 
@@ -26,8 +26,12 @@ async function main() {
   await login();
   console.log('✓ Login OK\n');
 
-  const listId = process.env.OOINFO_LIST_ID_FONTES ?? FONTES_LIST_ID;
-  console.log(`→ Lista: ${listId} (${FONTES_LIST_SLUG})\n`);
+  const listId = await resolveListId({
+    envVar: 'OOINFO_LIST_ID_FONTES',
+    slugCandidates: ['fontes-de-eventos'],
+    errorHint: 'Lista de fontes não encontrada. Rode `npm run table:fontes` primeiro.',
+  });
+  console.log(`→ Lista: ${listId}\n`);
 
   const res = await apiRequest<ItemsResponse>(
     `/api/lists/${listId}/items/optimized`,

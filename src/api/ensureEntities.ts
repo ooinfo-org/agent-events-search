@@ -1,5 +1,5 @@
 import { apiRequest } from './client.js';
-import { LOCAIS_LIST_ID, ARTISTAS_LIST_ID, ORGS_LIST_ID } from './mapping.js';
+import { getLocaisId, getArtistasId, getOrgsId } from './listIds.js';
 
 interface Item {
   id: string;
@@ -43,7 +43,8 @@ async function fetchAllItems(listId: string): Promise<Item[]> {
 
 async function loadLocaisCache() {
   if (cachesCarregados.locais) return;
-  const items = await fetchAllItems(LOCAIS_LIST_ID);
+  const listId = await getLocaisId();
+  const items = await fetchAllItems(listId);
   for (const it of items) {
     const nome = (it.values['nome'] as string) ?? '';
     const cidadeRef = it.values['cidade'];
@@ -55,7 +56,8 @@ async function loadLocaisCache() {
 
 async function loadArtistasCache() {
   if (cachesCarregados.artistas) return;
-  const items = await fetchAllItems(ARTISTAS_LIST_ID);
+  const listId = await getArtistasId();
+  const items = await fetchAllItems(listId);
   for (const it of items) {
     const nome = (it.values['nome_artistico'] as string) ?? '';
     if (nome) cacheArtistas.set(normalize(nome), it.id);
@@ -65,7 +67,8 @@ async function loadArtistasCache() {
 
 async function loadOrgsCache() {
   if (cachesCarregados.orgs) return;
-  const items = await fetchAllItems(ORGS_LIST_ID);
+  const listId = await getOrgsId();
+  const items = await fetchAllItems(listId);
   for (const it of items) {
     const nome = (it.values['nome'] as string) ?? '';
     if (nome) cacheOrgs.set(normalize(nome), it.id);
@@ -92,8 +95,9 @@ export async function ensureLocal(
   if (local.site) values['site'] = local.site;
 
   try {
+    const listId = await getLocaisId();
     const created = await apiRequest<{ id: string }>(
-      `/api/lists/${LOCAIS_LIST_ID}/items`,
+      `/api/lists/${listId}/items`,
       { method: 'POST', body: { values } },
     );
     cacheLocais.set(key, created.id);
@@ -116,8 +120,9 @@ export async function ensureArtista(artista: { nome_artistico: string; tipo?: st
   };
 
   try {
+    const listId = await getArtistasId();
     const created = await apiRequest<{ id: string }>(
-      `/api/lists/${ARTISTAS_LIST_ID}/items`,
+      `/api/lists/${listId}/items`,
       { method: 'POST', body: { values } },
     );
     cacheArtistas.set(key, created.id);
@@ -140,8 +145,9 @@ export async function ensureOrg(org: { nome: string; tipo?: string | null }): Pr
   };
 
   try {
+    const listId = await getOrgsId();
     const created = await apiRequest<{ id: string }>(
-      `/api/lists/${ORGS_LIST_ID}/items`,
+      `/api/lists/${listId}/items`,
       { method: 'POST', body: { values } },
     );
     cacheOrgs.set(key, created.id);

@@ -1,5 +1,6 @@
 import { apiRequest } from './client.js';
-import { FONTES_LIST_ID, FONTES_LIST_SLUG } from './mapping.js';
+import { resolveListId } from './resolveList.js';
+import { FONTES_LIST_SLUG } from './mapping.js';
 
 const FONTE_LABEL_AGENTE = 'Agente OpenAI Web Search';
 
@@ -27,15 +28,21 @@ function extractLabel(values: Record<string, unknown>): string {
 export async function ensureFonteAgente(): Promise<{ id: string; label: string; listId: string; listSlug: string }> {
   if (cached) return cached;
 
+  const listId = await resolveListId({
+    envVar: 'OOINFO_LIST_ID_FONTES',
+    slugCandidates: ['fontes-de-eventos'],
+    errorHint: 'Lista de fontes não encontrada. Rode `npm run table:fontes` e depois `npm run fontes:seed`.',
+  });
+
   const items = await apiRequest<ItemsResponse<FonteItem>>(
-    `/api/lists/${FONTES_LIST_ID}/items/optimized`,
+    `/api/lists/${listId}/items/optimized`,
     { auth: false, query: { limit: 200 } },
   );
 
   for (const it of items.data) {
     const label = extractLabel(it.values);
     if (label === FONTE_LABEL_AGENTE) {
-      cached = { id: it.id, label, listId: FONTES_LIST_ID, listSlug: FONTES_LIST_SLUG };
+      cached = { id: it.id, label, listId, listSlug: FONTES_LIST_SLUG };
       return cached;
     }
   }
@@ -50,10 +57,10 @@ export async function ensureFonteAgente(): Promise<{ id: string; label: string; 
   };
 
   const created = await apiRequest<{ id: string }>(
-    `/api/lists/${FONTES_LIST_ID}/items`,
+    `/api/lists/${listId}/items`,
     { method: 'POST', body: { values } },
   );
 
-  cached = { id: created.id, label: FONTE_LABEL_AGENTE, listId: FONTES_LIST_ID, listSlug: FONTES_LIST_SLUG };
+  cached = { id: created.id, label: FONTE_LABEL_AGENTE, listId, listSlug: FONTES_LIST_SLUG };
   return cached;
 }

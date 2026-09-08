@@ -169,22 +169,6 @@ Baseado no exemplo do pptx (slide 5).
 
 ---
 
-## 7. Tarefas a executar (roadmap)
-
-- [ ] Ler `ooinfo.org/docs` — mapear endpoints de `Evento`, `Espaço`, `Artista`, `Cidade`.
-- [ ] Baixar lista de capitais em `ooinfo.org.br/lists/cidades-do-brasil`.
-- [ ] Definir schema `Evento` final alinhado com API existente.
-- [ ] Implementar agente:
-  - [ ] Prompt de coleta por capital (busca web + LLM).
-  - [ ] Normalizador → schema.
-  - [ ] Dedup + `POST` na API.
-- [ ] Configurar agendamento diário (cron / task scheduler / GitHub Actions).
-- [ ] Log de execução por capital (sucesso, falha, nº eventos).
-- [ ] Handler de campos ausentes → marcar `precisa_complemento_comunidade = true`.
-- [ ] Testes com 1 capital piloto (Goiânia) antes de escalar.
-
----
-
 ## 8. Como rodar o agente
 
 ### 8.1 Setup
