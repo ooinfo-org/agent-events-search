@@ -5,6 +5,7 @@ output
 !.env.example
 *.log
 .git
+.github
 .vscode
 docs
 scripts/_probe.ts
